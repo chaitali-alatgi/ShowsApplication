@@ -52,6 +52,7 @@ public class ShowsAdapter extends RecyclerView.Adapter<ShowsAdapter.ViewHolder> 
     }
 
     public void setShowList(List<Show> showList) {
+        this.showList.clear();
         this.showList.addAll(showList);
         notifyDataSetChanged();
     }
