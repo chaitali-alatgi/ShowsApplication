@@ -19,7 +19,14 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://maven.google.com' }
     }
+}
+
+ext{
+    butterknifeVersion = '8.8.1'
+    daggerVersion = '2.0.1'
+    roomVersion = '1.1.0-alpha1'
 }
 
 task clean(type: Delete) {

@@ -4,8 +4,14 @@ import com.example.chaitali.showsapplication.model.Show;
 
 import java.util.List;
 
-import rx.Observable;
 
 public interface IShowsInteractor {
-    Observable<List<Show>> getShows();
+    interface IShowsCallBack {
+        void onSuccess(List<Show> showList);
+
+        void onError(String message);
+
+    }
+
+    void getShows(IShowsCallBack callBack);
 }

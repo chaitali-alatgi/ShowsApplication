@@ -6,6 +6,7 @@ import com.example.chaitali.showsapplication.ShowsApplication;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -72,7 +73,7 @@ public class NetworkModule {
     Retrofit provideRetrofit(Gson gson, Cache cache, OkHttpClient okHttpClient) {
         Retrofit.Builder builder = new Retrofit.Builder();
         builder.baseUrl(BASE_URL);
-        builder.addCallAdapterFactory(RxJavaCallAdapterFactory.create());
+        builder.addCallAdapterFactory(RxJava2CallAdapterFactory.create());
         builder.addConverterFactory(GsonConverterFactory.create());
         builder.client(okHttpClient);
         return builder.build();

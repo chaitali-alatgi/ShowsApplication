@@ -2,6 +2,8 @@ package com.example.chaitali.showsapplication;
 
 import android.app.Application;
 
+import com.example.chaitali.showsapplication.database.RoomDatabaseManager;
+
 import di.AppModule;
 import di.DaggerIAppComponent;
 import di.IAppComponent;
