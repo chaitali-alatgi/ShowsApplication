@@ -1,6 +1,6 @@
 package di;
 
-import com.example.chaitali.showsapplication.MainActivity;
+import com.example.chaitali.showsapplication.view.MainActivity;
 
 import javax.inject.Singleton;
 

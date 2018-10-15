@@ -2,7 +2,7 @@ package di;
 
 import android.content.Context;
 
-import com.example.chaitali.showsapplication.ShowsApplication;
+import com.example.chaitali.showsapplication.view.ShowsApplication;
 
 import dagger.Module;
 import dagger.Provides;

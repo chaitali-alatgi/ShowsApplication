@@ -1,4 +1,4 @@
-package com.example.chaitali.showsapplication;
+package com.example.chaitali.showsapplication.view;
 
 import android.app.Application;
 

@@ -1,23 +1,12 @@
 package com.example.chaitali.showsapplication.presenter;
 
-import android.util.Log;
-
-import com.example.chaitali.showsapplication.IShowsAPI;
-import com.example.chaitali.showsapplication.database.RoomDatabaseManager;
 import com.example.chaitali.showsapplication.interactor.IShowsInteractor;
-import com.example.chaitali.showsapplication.interactor.ShowsInteractorImp;
 import com.example.chaitali.showsapplication.model.Show;
 import com.example.chaitali.showsapplication.view.IShowsView;
 
 import java.util.List;
 
 import javax.inject.Inject;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.processors.PublishProcessor;
-import io.reactivex.schedulers.Schedulers;
 
 public class ShowsPresenterImp implements IShowsPresenter {
 

@@ -1,7 +1,6 @@
 package di;
 
-import com.example.chaitali.showsapplication.IShowsAPI;
-import com.example.chaitali.showsapplication.ShowsApplication;
+import com.example.chaitali.showsapplication.repository.IShowsAPI;
 
 import javax.inject.Singleton;
 

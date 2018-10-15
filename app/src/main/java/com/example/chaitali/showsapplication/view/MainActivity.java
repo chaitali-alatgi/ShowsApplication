@@ -1,20 +1,23 @@
-package com.example.chaitali.showsapplication;
+package com.example.chaitali.showsapplication.view;
 
 import android.content.Context;
+import android.graphics.Movie;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.chaitali.showsapplication.R;
 import com.example.chaitali.showsapplication.model.Show;
 import com.example.chaitali.showsapplication.presenter.IShowsPresenter;
-import com.example.chaitali.showsapplication.view.IShowsView;
-import com.example.chaitali.showsapplication.view.ShowsAdapter;
 
 import org.reactivestreams.Publisher;
 
@@ -40,10 +43,13 @@ public class MainActivity extends AppCompatActivity implements IShowsView{
     @Inject
     IShowsPresenter presenter;
 
-    ShowsAdapter adapter;
+    PaginationAdapter adapter;
 
     @BindView(R.id.shows_list)
-    RecyclerView showsList;
+    RecyclerView rvShowsList;
+
+    @BindView(R.id.main_progress)
+    ProgressBar progressBar;
 
 
     private int pageNumber = 0;
@@ -53,6 +59,15 @@ public class MainActivity extends AppCompatActivity implements IShowsView{
     private Queue<Disposable> compositeDisposable;
     LinearLayoutManager layoutManager;
     int numberofItems = 10;
+
+
+    private static final int PAGE_START = 0;
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
+    private int TOTAL_PAGES = 0;
+    private int currentPage = PAGE_START;
+    List<Show> showList = new ArrayList<>();
+    int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,20 +86,90 @@ public class MainActivity extends AppCompatActivity implements IShowsView{
 
     private void setUpView() {
         layoutManager = new LinearLayoutManager(this);
-        showsList.setLayoutManager(layoutManager);
-        adapter = new ShowsAdapter(this);
-        showsList.setAdapter(adapter);
+        rvShowsList.setLayoutManager(layoutManager);
+        adapter = new PaginationAdapter(this);
+        rvShowsList.setAdapter(adapter);
+
+        rvShowsList.setItemAnimator(new DefaultItemAnimator());
+
+        rvShowsList.addOnScrollListener(new PaginationScrollListener(layoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+                currentPage += 1;
+                loadNextPage(getNextItems());
+            }
+
+            @Override
+            public int getTotalPageCount() {
+                return TOTAL_PAGES;
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
+    }
+
+
+    private void loadFirstPage(List<Show> showList) {
+        Log.d("", "loadFirstPage: ");
+        List<Show> movies = showList;
+        progressBar.setVisibility(View.GONE);
+        adapter.addAll(movies);
+
+        if (currentPage <= TOTAL_PAGES) adapter.addLoadingFooter();
+        else isLastPage = true;
+
+    }
+
+    private void loadNextPage(List<Show> showList) {
+        Log.d("", "loadNextPage: " + currentPage);
+        List<Show> movies = showList;
+
+        adapter.removeLoadingFooter();
+        isLoading = false;
+
+        adapter.addAll(movies);
+
+        if (currentPage != TOTAL_PAGES) adapter.addLoadingFooter();
+        else isLastPage = true;
     }
 
     @Override
     public void showShows(final List<Show> shows) {
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                subscribeForData(shows);
+//            }
+//        });
+        showList = shows;
+        TOTAL_PAGES = showList.size() / 10;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                subscribeForData(shows);
+                loadFirstPage(getNextItems());
             }
         });
 
+    }
+
+    private List<Show> getNextItems() {
+        List<Show> moviesList = new ArrayList<>();
+        for(int i = count; i < count + 10; i++) {
+            if(count < showList.size()) {
+                moviesList.add(showList.get(i));
+            }
+        }
+        count += 10;
+        return moviesList;
     }
 
     @Override
@@ -98,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements IShowsView{
     }
 
     private void setUpLoadMoreListener() {
-        showsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        rvShowsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView,
                                    int dx, int dy) {
@@ -133,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements IShowsView{
                 .subscribe(new Consumer<List<Show>>() {
                     @Override
                     public void accept(@NonNull List<Show> items) throws Exception {
-                        adapter.setShowList(items);
+                        adapter.setMovies(items);
                         adapter.notifyDataSetChanged();
                     }
                 });
