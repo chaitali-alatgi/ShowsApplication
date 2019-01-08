@@ -1,6 +1,7 @@
 package com.example.chaitali.showsapplication.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Movie;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.chaitali.showsapplication.R;
@@ -79,6 +81,13 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 movieVH.name.setText(show.getName());
                 movieVH.description.setText(""+show.getRuntime());
                 movieVH.number.setText(position+" ");
+                movieVH.view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent newIntent = new Intent(context, SecondActivity.class);
+                        context.startActivity(newIntent);
+                    }
+                });
                 break;
             case LOADING:
 //                Do nothing
@@ -164,6 +173,8 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      * Main list's content ViewHolder
      */
     protected class MovieVH extends RecyclerView.ViewHolder {
+        @BindView(R.id.item)
+        LinearLayout view;
         @BindView(R.id.number)
         TextView number;
         @BindView(R.id.poster)

@@ -1,8 +1,6 @@
 package com.example.chaitali.showsapplication.view;
 
 import android.content.Context;
-import android.graphics.Movie;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -144,12 +142,6 @@ public class MainActivity extends AppCompatActivity implements IShowsView{
 
     @Override
     public void showShows(final List<Show> shows) {
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                subscribeForData(shows);
-//            }
-//        });
         showList = shows;
         TOTAL_PAGES = showList.size() / 10;
         runOnUiThread(new Runnable() {
